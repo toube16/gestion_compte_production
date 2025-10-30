@@ -19,6 +19,10 @@ services:
         sync: false
       - key: DATABASE_PUBLIC_URL
         sync: false
+      - key: DATABASE_URL
+        value: postgresql://postgres:wiyfClRsnOvuqaNLvNpCqLrIWgcEPISI@postgres.railway.internal:5432/railway
+      - key: DB_CONNECTION
+        value: pgsql
       - key: DB_HOST
         value: postgres.railway.internal
       - key: DB_PORT
@@ -28,7 +32,7 @@ services:
       - key: DB_USERNAME
         value: postgres
       - key: DB_PASSWORD
-        sync: false
+        value: wiyfClRsnOvuqaNLvNpCqLrIWgcEPISI
       - key: DB_SSLMODE
         value: require
       # Les secrets (APP_KEY, DATABASE_URL, DB_PASSWORD, PGPASSWORD) sont marqués sync: false
