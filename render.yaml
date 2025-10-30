@@ -20,19 +20,19 @@ services:
       - key: DATABASE_PUBLIC_URL
         sync: false
       - key: DATABASE_URL
-        value: postgresql://postgres:hUpXRElCfFBvUcqOczDStyBOYfVoferR@turntable.proxy.rlwy.net:34419/railway
+        value: postgresql://postgres:eFRBAgMbnSapRoXgAlCysXWbeQnMFSWv@hopper.proxy.rlwy.net:31524/railway
       - key: DB_CONNECTION
         value: pgsql
       - key: DB_HOST
-        value: turntable.proxy.rlwy.net
+        value: hopper.proxy.rlwy.net
       - key: DB_PORT
-        value: "34419"
+        value: "31524"
       - key: DB_DATABASE
         value: railway
       - key: DB_USERNAME
         value: postgres
       - key: DB_PASSWORD
-        value: hUpXRElCfFBvUcqOczDStyBOYfVoferR
+        value: eFRBAgMbnSapRoXgAlCysXWbeQnMFSWv
       - key: DB_SSLMODE
         value: require
       # Les secrets (APP_KEY, DATABASE_URL, DB_PASSWORD, PGPASSWORD) sont marqués sync: false
