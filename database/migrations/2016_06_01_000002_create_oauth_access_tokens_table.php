@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
+     * Run this migration outside of a transaction so SQL errors are visible on some drivers.
+     */
+    public $withinTransaction = false;
+    /**
      * Run the migrations.
      */
     public function up(): void

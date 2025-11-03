@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\User;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -13,28 +14,55 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Créer un administrateur
-        \App\Models\User::factory()->create([
-            'name' => 'Admin User',
-            'email' => 'admin@gestion-compte.com',
-            'role' => 'admin',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@gestion-compte.com'],
+            [
+                'name' => 'Admin User',
+                'email_verified_at' => now(),
+                'password' => bcrypt('admin123'),
+                'role' => 'admin',
+                'is_active' => true,
+                'remember_token' => Str::random(10),
+            ]
+        );
 
         // Créer des agents
-        \App\Models\User::factory()->create([
-            'name' => 'Agent Dupont',
-            'email' => 'agent1@gestion-compte.com',
-            'role' => 'agent',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'agent1@gestion-compte.com'],
+            [
+                'name' => 'Agent Dupont',
+                'email_verified_at' => now(),
+                'password' => bcrypt('agent123'),
+                'role' => 'agent',
+                'is_active' => true,
+                'remember_token' => Str::random(10),
+            ]
+        );
 
-        \App\Models\User::factory()->create([
-            'name' => 'Agent Martin',
-            'email' => 'agent2@gestion-compte.com',
-            'role' => 'agent',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'agent2@gestion-compte.com'],
+            [
+                'name' => 'Agent Martin',
+                'email_verified_at' => now(),
+                'password' => bcrypt('agent123'),
+                'role' => 'agent',
+                'is_active' => true,
+                'remember_token' => Str::random(10),
+            ]
+        );
 
         // Créer des utilisateurs clients
-        \App\Models\User::factory(7)->create([
-            'role' => 'client',
-        ]);
+        User::factory(7)->make()->each(function ($user) {
+    User::updateOrCreate(
+        ['email' => $user->email], // évite les doublons
+        array_merge($user->toArray(), [
+            'password' => bcrypt('client123'), // mot de passe par défaut pour tous les clients
+            'email_verified_at' => now(),
+            'is_active' => true,
+            'remember_token' => Str::random(10),
+        ])
+    );
+});
+
     }
 }

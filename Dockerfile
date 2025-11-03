@@ -17,7 +17,7 @@ FROM php:8.3-fpm
 
 # Installer les dépendances système et extensions PHP
 RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev curl && \
+  git unzip libpq-dev curl postgresql-client && \
     docker-php-ext-install pdo pdo_pgsql && \
     rm -rf /var/lib/apt/lists/*
 
@@ -77,4 +77,5 @@ EXPOSE 8000
 
 # Entrypoint et commande par défaut
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# Use the PORT env var provided by Render if present, otherwise fallback to 8000
+CMD ["sh", "-lc", "php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"]

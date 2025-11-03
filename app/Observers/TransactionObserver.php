@@ -49,7 +49,7 @@ class TransactionObserver
      */
     private function validateTransactionRules(Transaction $transaction): void
     {
-        $compte = $transaction->compte;
+        $compte = $transaction->compte()->withoutGlobalScopes()->first();
 
         // Règle 1: Le compte doit être actif et non bloqué
         if ($compte->statut !== 'actif' || $compte->is_blocked) {
