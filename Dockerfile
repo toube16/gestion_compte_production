@@ -21,10 +21,6 @@ RUN apt-get update && apt-get install -y \
     docker-php-ext-install pdo pdo_pgsql && \
     rm -rf /var/lib/apt/lists/*
 
-# Créer le groupe et l'utilisateur non-root
-RUN groupadd -g 1000 laravel && \
-    useradd -u 1000 -g laravel -m -s /bin/bash laravel
-
 # Définir le répertoire de travail
 WORKDIR /var/www/html
 
@@ -66,11 +62,11 @@ echo "Starting Laravel application..."\n\
 exec "$@"' > /usr/local/bin/docker-entrypoint.sh && \
 chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Changer le propriétaire du code vers l’utilisateur non-root
-RUN chown -R laravel:laravel /var/www/html
-
-# Passer à l’utilisateur non-root
-USER laravel
+# Note: Render monte un disque sur /var/www/html/storage qui peut être possédé par root.
+# Pour éviter des erreurs de permission lors des commandes d'entrypoint (cache/migrate),
+# nous laissons le conteneur s'exécuter en root ici. Si tu veux re‑introduire un
+# utilisateur non-root pour la sécurité, on peut ajouter un step d'entrypoint qui
+# change la propriété du dossier monté (requiert gosu/su-exec).
 
 # Exposer le port
 EXPOSE 8000
