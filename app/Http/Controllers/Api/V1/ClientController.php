@@ -212,13 +212,14 @@ class ClientController extends Controller
      *     )
      * )
      */
-    public function show(Client $client): JsonResponse
+    public function show(Request $request, Client $client): JsonResponse
     {
         $user = $request->user();
 
         // Vérifier les permissions selon le rôle
         if ($user->role === 'client') {
-            // Les clients ne peuvent voir que leur propre profil
+            // Les clients ne peuvent voir que leur propre profil — l'ID en URL ne doit pas permettre
+            // d'accéder à un autre client. On vérifie que le client demandé appartient bien à l'utilisateur.
             $clientIds = $user->clients->pluck('id');
             if (!in_array($client->id, $clientIds->toArray())) {
                 throw new UnauthorizedAccessException("Vous n'avez pas accès à ce client.");
@@ -318,11 +319,11 @@ class ClientController extends Controller
     public function comptes(Request $request, Client $client): JsonResponse
     {
         $user = $request->user();
-
         // Vérifier les permissions selon le rôle
         if ($user->role === 'client') {
-            // Pour les utilisateurs clients, vérifier s'ils sont liés au client spécifique
-            if ($user->client_id !== $client->id) {
+            // Pour les utilisateurs clients, s'assurer qu'ils accèdent uniquement aux comptes du client lié
+            $clientIds = $user->clients->pluck('id');
+            if (!in_array($client->id, $clientIds->toArray())) {
                 throw new UnauthorizedAccessException("Vous n'avez pas accès aux comptes de ce client.");
             }
         }
@@ -427,11 +428,10 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client): JsonResponse
     {
         $user = $request->user();
-
         // Vérifier les permissions : seuls les propriétaires peuvent modifier
         if ($user->role === 'client') {
-            // Pour les utilisateurs clients, vérifier s'ils sont liés au client spécifique
-            if ($user->client_id !== $client->id) {
+            $clientIds = $user->clients->pluck('id');
+            if (!in_array($client->id, $clientIds->toArray())) {
                 throw new UnauthorizedAccessException("Vous n'avez pas accès à ce client.");
             }
         }
